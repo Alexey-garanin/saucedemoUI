@@ -10,4 +10,4 @@ COPY . .
 
 RUN chmod +x ./gradlew
 
-CMD ["./gradlew", "clean", "test"]
+CMD ["./gradlew", "test"]
