@@ -29,11 +29,13 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(25)
+    jvmToolchain(17)
 }
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("playwright.headless", "true")
+    systemProperty("allure.results.directory", "build/allure-results")
 }
 
 allure {
