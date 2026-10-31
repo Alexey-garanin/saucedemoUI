@@ -1,0 +1,60 @@
+name: UI Tests CI
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and run tests in Docker
+        run: |
+          echo "Building Docker image with Playwright..."
+          docker build -t saucedemo-ui-tests .
+          
+          echo "Running UI tests in Docker container..."
+          docker run --rm \
+            -v ${{ github.workspace }}/allure-results:/app/build/allure-results \
+            -e CI=true \
+            -e PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
+            saucedemo-ui-tests
+
+      - name: Generate Allure Report
+        if: always()
+        run: |
+          echo "Downloading Allure CLI..."
+          wget -qO allure.tgz https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.25.0/allure-commandline-2.25.0.tgz
+          tar -zxvf allure.tgz
+          
+          echo "Generating Allure Report..."
+          ./allure-2.25.0/bin/allure generate allure-results -o allure-report --clean || echo "Warning: Allure generation had issues, but continuing"
+
+      - name: Upload Allure Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-html
+          path: allure-report
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          keep_files: false
+          force_orphan: true

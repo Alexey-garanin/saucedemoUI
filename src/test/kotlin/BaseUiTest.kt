@@ -3,12 +3,8 @@ import com.microsoft.playwright.BrowserContext
 import com.microsoft.playwright.BrowserType
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.Playwright
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import utils.AllureScreenshotExtension
 
@@ -20,15 +16,16 @@ open class BaseUiTest {
 
     protected val defaultTimeout: Double = 2000.0
 
+
     @RegisterExtension
     val screenshotExtension = AllureScreenshotExtension { page }
-
 
     @BeforeEach
     fun setUp() {
         playwright = Playwright.create()
         browser = playwright.chromium().launch(
-            BrowserType.LaunchOptions().setHeadless(false)
+            BrowserType.LaunchOptions()
+                .setHeadless(true)
         )
         context = browser.newContext()
         page = context.newPage()
@@ -37,10 +34,14 @@ open class BaseUiTest {
 
     @AfterEach
     fun tearDown() {
-        page.close()
-        context.close()
-        browser.close()
-        playwright.close()
-    }
 
+        try {
+            page.close()
+            context.close()
+            browser.close()
+            playwright.close()
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+        }
+    }
 }
