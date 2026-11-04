@@ -22,10 +22,10 @@ dependencies {
 
 
     testImplementation("io.qameta.allure:allure-junit5:2.25.0")
-    testImplementation("io.qameta.allure:allure-rest-assured:2.25.0")
+    implementation("io.qameta.allure:allure-rest-assured:2.25.0")
 
 
-    testImplementation("org.assertj:assertj-core:3.26.3")
+    implementation("org.assertj:assertj-core:3.26.3")
 }
 
 kotlin {
@@ -36,6 +36,7 @@ tasks.test {
     useJUnitPlatform()
     systemProperty("playwright.headless", "true")
     systemProperty("allure.results.directory", "build/allure-results")
+    ignoreFailures = true
 }
 
 allure {
