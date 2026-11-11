@@ -1,8 +1,8 @@
 package pages
 
 import com.microsoft.playwright.Page
-import data.ProductContext
-import data.ProductDto
+import dto.ProductContext
+import dto.ProductDto
 import io.qameta.allure.Step
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
