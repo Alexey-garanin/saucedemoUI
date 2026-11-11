@@ -1,4 +1,4 @@
-package data
+package dto
 
 import com.microsoft.playwright.Locator
 

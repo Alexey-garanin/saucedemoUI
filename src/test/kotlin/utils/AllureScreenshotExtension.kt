@@ -19,7 +19,7 @@ class AllureScreenshotExtension(private val pageProvider: () -> Page) : AfterTes
                     "png"
                 )
             } catch (e: Exception) {
-                println("Не удалось сделать скриншот: ${e.message}")
+                println("Failed to take a screenshot: ${e.message}")
             }
         }
     }
