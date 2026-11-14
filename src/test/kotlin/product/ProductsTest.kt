@@ -13,8 +13,10 @@ import kotlin.test.Test
 @Epic("Products page")
 class ProductsTest: BaseUiTest(){
 
+    //[tbu] 1.remove test 2.add several products to card 3.burger-menu tests
 
     @Test
+    @Story("Data Consistency")
     @DisplayName("Product details should match between list and card")
     fun verifyProductDetailsConsistency() {
         val loginPage = LoginPage(page)
@@ -24,7 +26,6 @@ class ProductsTest: BaseUiTest(){
         val productFromCard = productsPage.openProductCard(productFromList.itemLocator).getProductDetails()
 
         productsPage.assertProductDetailsMatch(productFromList.dto, productFromCard.dto)
-
     }
 
     @ParameterizedTest(name = "{0}")
@@ -46,13 +47,25 @@ class ProductsTest: BaseUiTest(){
         }
 
         productsPage.selectSort(sortName)
-
         val actual = productsPage.getAllProductsDetails()
-
         productsPage.assertProductsPageItemsOrder(actual,expected)
-
     }
 
+    @Test
+    @Story("Data Consistency")
+    @DisplayName("Product details should match between list and cart")
+    fun verifyProductDetailsConsistencyBetweenListAndCart(){
+        val loginPage = LoginPage(page)
+        val productsPage = loginPage.login(TestData.Users.STANDARD_USER, TestData.Passwords.PASSWORD)
+
+        val productFromList = productsPage.getProductDetails()
+        productsPage.addToCart(productFromList)
+
+       val productFromCart = productsPage.openCart().getProductDetails()
+
+       productsPage.assertProductDetailsMatch(productFromList.dto, productFromCart.dto)
+
+    }
 
 
 }

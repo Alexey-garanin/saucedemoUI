@@ -14,7 +14,7 @@ open class BaseUiTest {
     private lateinit var context: BrowserContext
     protected lateinit var page: Page
 
-    protected val defaultTimeout: Double = 2000.0
+    protected val defaultTimeout: Double = 500.0
 
 
     @RegisterExtension

@@ -44,7 +44,7 @@ class LoginPage(page: Page) : BasePage(page){
         val productsPage = ProductsPage(page)
         productsPage.assertProductsPageIsLoaded()
 
-        return ProductsPage(page)
+        return productsPage
     }
 
 
