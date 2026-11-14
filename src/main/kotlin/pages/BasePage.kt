@@ -5,7 +5,7 @@ import dto.ProductContext
 import dto.ProductDto
 import io.qameta.allure.Step
 import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
+import com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat
 
 open class BasePage(protected  val page: Page) {
 
@@ -17,11 +17,15 @@ open class BasePage(protected  val page: Page) {
     val itemDesc = page.locator("[data-test='inventory-item-desc']")
     val itemPrice = page.locator("[data-test='inventory-item-price']")
     val itemAddBtn = page.locator("[data-test^='add-to-cart']")
+    val itemRemoveBtn = page.locator("[data-test^='remove']")
+
+    val cartIcon = page.locator("[data-test='shopping-cart-link']")
+    val cartIconCounter = page.locator("[data-test='shopping-cart-badge']")
 
 
-    @Step("Get product details")
+    @Step("Get product details: {product.dto.title}")
     fun getProductDetails(): ProductContext  {
-        assertThat(itemContainer.count()).isGreaterThan(0)
+        Assertions.assertThat(itemContainer.count()).isGreaterThan(0)
         val randomItem = itemContainer.all().random()
 
         val dto = ProductDto(
@@ -32,9 +36,26 @@ open class BasePage(protected  val page: Page) {
         return ProductContext(dto, randomItem)
     }
 
-    @Step("Verify product details match between list and card")
-    fun assertProductDetailsMatch(listDto: ProductDto, cardDto: ProductDto) {
-        Assertions.assertThat(cardDto).isEqualTo(listDto)
+    @Step("Add product to cart: {product.dto.title}")
+    fun addToCart(product: ProductContext) {
+        product.itemLocator.locator(itemAddBtn).click()
+        assertThat(product.itemLocator.locator(itemRemoveBtn)).isVisible()
+        assertThat(cartIconCounter).isVisible()
+    }
+
+    @Step("Open shopping cart")
+    fun openCart(): CartPage{
+        cartIcon.click()
+        val cartPage = CartPage(page)
+        cartPage.assertCartPageIsLoaded()
+
+        return cartPage
+    }
+
+
+    @Step("Verify product details match")
+    fun assertProductDetailsMatch(firstDto: ProductDto, secondDto: ProductDto) {
+        Assertions.assertThat(firstDto).isEqualTo(secondDto)
     }
 
 }

@@ -3,6 +3,7 @@ package pages
 import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat
+import dto.ProductContext
 import dto.ProductDto
 import io.qameta.allure.Step
 import org.assertj.core.api.Assertions
