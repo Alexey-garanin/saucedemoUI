@@ -23,7 +23,7 @@ open class BasePage(protected  val page: Page) {
     val cartIconCounter = page.locator("[data-test='shopping-cart-badge']")
 
 
-    @Step("Get product details: {product.dto.title}")
+    @Step("Get product details")
     fun getProductDetails(): ProductContext  {
         Assertions.assertThat(itemContainer.count()).isGreaterThan(0)
         val randomItem = itemContainer.all().random()
@@ -46,16 +46,14 @@ open class BasePage(protected  val page: Page) {
     @Step("Open shopping cart")
     fun openCart(): CartPage{
         cartIcon.click()
-        val cartPage = CartPage(page)
-        cartPage.assertCartPageIsLoaded()
-
-        return cartPage
+        return CartPage(page).assertCartPageIsLoaded()
     }
 
-
-    @Step("Verify product details match")
-    fun assertProductDetailsMatch(firstDto: ProductDto, secondDto: ProductDto) {
-        Assertions.assertThat(firstDto).isEqualTo(secondDto)
+    @Step("Remove item from cart")
+    fun removeItemFromCart(product: ProductContext) {
+        itemRemoveBtn.click()
+        assertThat(product.itemLocator.locator(itemAddBtn)).isVisible()
+        assertThat(cartIconCounter).isHidden()
     }
 
 }

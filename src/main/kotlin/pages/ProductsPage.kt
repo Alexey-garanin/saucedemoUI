@@ -3,7 +3,6 @@ package pages
 import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat
-import dto.ProductContext
 import dto.ProductDto
 import io.qameta.allure.Step
 import org.assertj.core.api.Assertions
@@ -24,10 +23,7 @@ class ProductsPage(page: Page) : BasePage(page) {
     @Step("Open product card")
     fun openProductCard(product: Locator): ItemPage {
         product.locator(itemTitle).click()
-
-        val itemPage = ItemPage(page)
-        itemPage.assertItemPageIsLoaded()
-        return itemPage
+        return ItemPage(page).assertItemPageIsLoaded()
     }
 
     @Step("Get all products details")
@@ -52,6 +48,5 @@ class ProductsPage(page: Page) : BasePage(page) {
         Assertions.assertThat(actual).containsExactlyElementsOf(expected)
         return this
     }
-
 
 }

@@ -8,8 +8,6 @@ class ItemPage(page: Page) : BasePage(page){
 
     private val backToProducts = page.locator("[data-test='back-to-products']")
 
-
-
     @Step("Assert Item page is visible")
     fun assertItemPageIsLoaded(): ItemPage {
         assertThat(backToProducts).isVisible()
@@ -17,6 +15,11 @@ class ItemPage(page: Page) : BasePage(page){
         return this
     }
 
+    @Step("Back to products page")
+    fun backToProducts(): ProductsPage {
+        backToProducts.click()
 
+        return ProductsPage(page)
+    }
 
 }

@@ -58,5 +58,4 @@ class LoginPage(page: Page) : BasePage(page){
         assertThat(errorContainer).containsText(error)
         return this
     }
-
 }
