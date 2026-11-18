@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import pages.LoginPage
+import utils.Assertions
 import kotlin.test.Test
 
 @Epic("Products page")
@@ -19,13 +20,13 @@ class ProductsTest: BaseUiTest(){
     @Story("Data Consistency")
     @DisplayName("Product details should match between list and card")
     fun verifyProductDetailsConsistency() {
-        val loginPage = LoginPage(page)
-        val productsPage = loginPage.login(TestData.Users.STANDARD_USER, TestData.Passwords.PASSWORD)
+        val productsPage = LoginPage(page)
+            .login(TestData.Users.STANDARD_USER, TestData.Passwords.PASSWORD)
 
         val productFromList = productsPage.getProductDetails()
         val productFromCard = productsPage.openProductCard(productFromList.itemLocator).getProductDetails()
 
-        productsPage.assertProductDetailsMatch(productFromList.dto, productFromCard.dto)
+        Assertions.assertMatch(productFromList.dto, productFromCard.dto)
     }
 
     @ParameterizedTest(name = "{0}")
@@ -33,8 +34,8 @@ class ProductsTest: BaseUiTest(){
     @Story("Sorting Scenarios")
     @DisplayName("Verify product sorting")
     fun verifySorting(sortName: String) {
-        val loginPage = LoginPage(page)
-        val productsPage = loginPage.login(TestData.Users.STANDARD_USER, TestData.Passwords.PASSWORD)
+        val productsPage = LoginPage(page)
+            .login(TestData.Users.STANDARD_USER, TestData.Passwords.PASSWORD)
 
         val default = productsPage.getAllProductsDetails()
 
@@ -55,17 +56,16 @@ class ProductsTest: BaseUiTest(){
     @Story("Data Consistency")
     @DisplayName("Product details should match between list and cart")
     fun verifyProductDetailsConsistencyBetweenListAndCart(){
-        val loginPage = LoginPage(page)
-        val productsPage = loginPage.login(TestData.Users.STANDARD_USER, TestData.Passwords.PASSWORD)
+        val productsPage = LoginPage(page)
+            .login(TestData.Users.STANDARD_USER, TestData.Passwords.PASSWORD)
 
         val productFromList = productsPage.getProductDetails()
         productsPage.addToCart(productFromList)
 
        val productFromCart = productsPage.openCart().getProductDetails()
 
-       productsPage.assertProductDetailsMatch(productFromList.dto, productFromCart.dto)
+        Assertions.assertMatch(productFromList.dto, productFromCart.dto)
 
     }
-
 
 }

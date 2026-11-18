@@ -19,4 +19,10 @@ class CartPage(page: Page) : BasePage(page) {
     }
 
 
+    @Step("Assert that cart is empty")
+    fun assertThatCartIsEmpty(): CartPage {
+        assertThat(itemContainer).isHidden()
+        return this
+    }
+
 }
